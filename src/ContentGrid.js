@@ -46,6 +46,12 @@ export default function CenteredGrid(props) {
                 <Grid item xs={4}>
                     <Paper className={classes.paper}>xs=3</Paper>
                 </Grid>
+                <Grid item xs={2}>
+
+                </Grid>
+                <Grid item xs={2}>
+                    <Paper className={classes.paper}>Click to See All 5 Charts</Paper>
+                </Grid>
 
             </Grid>
         </div>

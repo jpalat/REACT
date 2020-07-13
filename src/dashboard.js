@@ -12,22 +12,23 @@ export default class Dashboard extends PureComponent {
         this.state={
             isLoading:false,
             latestData:{},
+            voltage:[],
         }
     }
 
     componentWillMount() {
         this.setState({isLoading: true})
         let temp = {}
+        let voltageData=[]
         fetch("/BMS_Realtime_output.csv")
             .then(v => v.text())
             .then(data => {
                 //console.log(data)
 
                 let lines = data.split("\n")
-                //console.log(lines)
-
                 let len = lines.length
-                //console.log(len)
+
+                // Latest data
                 let lastCell = lines[len - 1].split(",")
                 console.log(lastCell)
                 temp = {
@@ -39,13 +40,27 @@ export default class Dashboard extends PureComponent {
                     SOHC: lastCell[5],
                 }
                 console.log(temp)
-                this.setState({isLoading: false, latestData: temp})
+                this.setState({latestData: temp})
+
+                // Voltage data
+                for(let i = len-50;i<len;i++){
+                    let obj = {}
+                    let cells = lines[i].split(",")
+                    let l = cells[0].length
+                    obj['time']=cells[0].substr(12,l-13)
+                    obj['voltage']=parseFloat(cells[1])
+                    voltageData.push(obj)
+                }
+                JSON.stringify(voltageData)
+                console.log(voltageData)
+                this.setState({voltage:voltageData})
+                this.setState({isLoading:false})
             })
     }
 
 
     render() {
-        let {latestData,isLoading} = this.state
+        let {latestData,isLoading,voltage} = this.state
         let {Header, Content, Footer} = Layout;
         if (isLoading){
             return(
@@ -66,14 +81,9 @@ export default class Dashboard extends PureComponent {
                             </Menu>
                         </Header>
                         <Content className="site-layout" style={{padding: '0 50px', marginTop: 64}}>
-                            {/*<Breadcrumb style={{ margin: '16px 0' }}>*/}
-                            {/*    <Breadcrumb.Item>Home</Breadcrumb.Item>*/}
-                            {/*    <Breadcrumb.Item>List</Breadcrumb.Item>*/}
-                            {/*    <Breadcrumb.Item>App</Breadcrumb.Item>*/}
-                            {/*</Breadcrumb>*/}
                             <div className="site-layout-background"
                                  style={{padding: 24, minHeight: 800, marginTop: 20, marginLeft: 60}}>
-                                <ContentPage latest={latestData}/>
+                                <ContentPage voltageData={voltage} latest={latestData}/>
                             </div>
                         </Content>
                         <Footer style={{textAlign: 'center'}}>ADAC LAB 2020</Footer>

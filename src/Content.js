@@ -3,6 +3,8 @@ import { Row, Col, Slider } from 'antd';
 import './contentCSS.css'
 import 'antd/dist/antd.css';
 import CenteredGrid from "./ContentGrid";
+import Linechart from "./lineChart";
+import ChartPaper from "./ChartPaper";
 
 function ContentPage(props){
 
@@ -12,11 +14,18 @@ function ContentPage(props){
         setChartOpen(t)
     }
 
-    console.log("In Content: ",props.latest)
+    const chartCloseCallback = function(){
+        setChartOpen(false)
+    }
+
+    //console.log("In Content: ",props.latest)
+    console.log("In Content: ",props.voltageData)
     return(
         <div>
-            <CenteredGrid latest={props.latest} callback={chartOpenCallback}/>
-            {(chartOpen)?(null):null}
+            {(chartOpen)?(
+                <ChartPaper voltage={props.voltageData} callback={chartCloseCallback} />):null}
+            <CenteredGrid latest={props.latest} callback={chartOpenCallback} style={{position:'fixed',zIndex:10}}/>
+
         </div>
     );
 }
