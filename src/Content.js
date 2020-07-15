@@ -8,23 +8,11 @@ import ChartPaper from "./ChartPaper";
 
 function ContentPage(props){
 
-    const [chartOpen,setChartOpen] = React.useState(false)
-
-    const chartOpenCallback = function(t){
-        setChartOpen(t)
-    }
-
-    const chartCloseCallback = function(){
-        setChartOpen(false)
-    }
-
     //console.log("In Content: ",props.latest)
     console.log("In Content: ",props.voltageData)
     return(
         <div>
-            {(chartOpen)?(
-                <ChartPaper voltage={props.voltageData} callback={chartCloseCallback} />):null}
-            <CenteredGrid latest={props.latest} callback={chartOpenCallback} style={{position:'fixed',zIndex:10}}/>
+            <CenteredGrid latest={props.latest} voltage={props.voltageData} style={{position:'fixed',zIndex:10}}/>
 
         </div>
     );

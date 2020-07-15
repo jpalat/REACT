@@ -72,17 +72,17 @@ export default class Dashboard extends PureComponent {
                 <div>
                     <Layout>
                         <div><img className="logo" src='/ADAC_logo.jpg' style={{position: 'fixed', zIndex: 10}}/></div>
-                        <Header style={{position: 'fixed', zIndex: 1, width: '100%'}}>
+                        {/*<Header style={{position: 'fixed', zIndex: 1, width: '100%'}}>*/}
 
-                            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{marginLeft: 80}}>
-                                <Menu.Item key="1" style={{fontSize: 18}}>Battery 1</Menu.Item>
-                                <Menu.Item key="2" style={{fontSize: 18}}>Battery 2</Menu.Item>
-                                <Menu.Item key="3" style={{fontSize: 18}}>Battery 3</Menu.Item>
-                            </Menu>
-                        </Header>
-                        <Content className="site-layout" style={{padding: '0 50px', marginTop: 64}}>
+                        {/*    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{marginLeft: 80}}>*/}
+                        {/*        <Menu.Item key="1" style={{fontSize: 18}}>Battery 1</Menu.Item>*/}
+                        {/*        <Menu.Item key="2" style={{fontSize: 18}}>Battery 2</Menu.Item>*/}
+                        {/*        <Menu.Item key="3" style={{fontSize: 18}}>Battery 3</Menu.Item>*/}
+                        {/*    </Menu>*/}
+                        {/*</Header>*/}
+                        <Content className="site-layout" style={{padding: '0 50px', marginTop: 0}}>
                             <div className="site-layout-background"
-                                 style={{padding: 24, minHeight: 800, marginTop: 20, marginLeft: 60}}>
+                                 style={{padding: 24, minHeight: 700, marginTop: 20, marginLeft: 60}}>
                                 <ContentPage voltageData={voltage} latest={latestData}/>
                             </div>
                         </Content>

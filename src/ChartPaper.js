@@ -9,13 +9,13 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         '& > *': {
             position:'absolute',
-            width: 550,
-            height: 350,
+            width: 850,
+            height: 650,
             zIndex:100,
             top:'50%',
             left:'50%',
-            marginTop:-175,
-            marginLeft:-275,
+            marginTop:-325,
+            marginLeft:-425,
             backgroundColor:'#ffffff',
         },
     },
@@ -24,12 +24,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ChartPaper(props) {
     const classes = useStyles();
 
-    console.log("In chartPaper: ",props.voltage)
+    // console.log("In chartPaper: ",props.voltage)
+    let data = props.location.state;
 
     return (
         <div className={classes.root}>
             <Paper>
-                <Linechart callback={props.callback} data={props.voltage}/>
+                <Linechart callback={props.callback} data={data}/>
+                {/*<h1>Hello World</h1>*/}
             </Paper>
         </div>
     );

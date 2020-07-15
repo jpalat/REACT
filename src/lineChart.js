@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import IconButton from '@material-ui/core/IconButton';
 
 export default class Linechart extends PureComponent {
 
@@ -12,23 +10,14 @@ export default class Linechart extends PureComponent {
     this.data = props.data;
   }
 
-  handleBack=()=>{
-      console.log("closed")
-      this.props.callback();
-  }
 
   render() {
     return (
         <div>
-            <div style={{textAlign:'left'}}>
-                <IconButton aria-label="back" >
-                    <ArrowBackIcon onClick={this.handleBack}/>
-                </IconButton>
-            </div>
 
           <LineChart
-              width={500}
-              height={300}
+              width={800}
+              height={600}
               data={this.data}
               margin={{
                 top: 10, right: 20, left: 20, bottom: 5,

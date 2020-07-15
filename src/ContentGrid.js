@@ -32,7 +32,7 @@ export default function CenteredGrid(props) {
             <Grid container spacing={3}>
 
                 <Grid item xs={4}>
-                    <VoltageCard className={classes.card} latest={props.latest} callback={props.callback}/>
+                    <VoltageCard className={classes.card} data={props.voltage} latest={props.latest}/>
                 </Grid>
                 <Grid item xs={4}>
                     <Paper className={classes.paper}>xs=6</Paper>

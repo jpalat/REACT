@@ -5,8 +5,9 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import history from './History'
+
 
 const useStyles = makeStyles({
     root: {
@@ -28,7 +29,7 @@ export default function VoltageCard(props) {
     time_stamp = time_stamp.substr(1,len-2)
 
     const handleOnclick = function(){
-            props.callback(true) // true to show graph
+        history.push({pathname:'/VoltageChart',state:props.data})
     }
 
     return (
