@@ -6,6 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
 import history from './History'
 
 
@@ -21,6 +22,7 @@ const useStyles = makeStyles({
 
 export default function VoltageCard(props) {
     const classes = useStyles();
+    const [checked, setChecked] = React.useState(false);
 
     let vol = parseFloat(props.latest['voltage'])
     vol = vol.toFixed(2)
@@ -31,6 +33,16 @@ export default function VoltageCard(props) {
     const handleOnclick = function(){
         history.push({pathname:'/VoltageChart',state:props.data})
     }
+
+    const handleSelect = function(){
+        if (checked){
+            setChecked(false)
+        }
+        else {
+            setChecked(true)
+        }
+    }
+
 
     return (
         <Card className={classes.root}>
@@ -56,6 +68,12 @@ export default function VoltageCard(props) {
                 {/*<Button size="small" color="primary">*/}
                 {/*    Learn More*/}
                 {/*</Button>*/}
+                <Checkbox
+                    checked={checked}
+                    color={"primary"}
+                    onChange={handleSelect}
+                    inputProps={{ 'aria-label': 'select this parameter' }}
+                />
             </CardActions>
         </Card>
     );

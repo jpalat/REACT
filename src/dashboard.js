@@ -43,11 +43,13 @@ export default class Dashboard extends PureComponent {
                 this.setState({latestData: temp})
 
                 // Voltage data
-                for(let i = len-50;i<len;i++){
+                // Default is last 6000 data (pass 5 hours)
+                for(let i = len-6000;i<len;i++){
                     let obj = {}
                     let cells = lines[i].split(",")
-                    let l = cells[0].length
-                    obj['time']=cells[0].substr(12,l-13)
+                    //let l = cells[0].length
+                    obj['time']=cells[0]
+                        //.substr(12,l-13)
                     obj['voltage']=parseFloat(cells[1])
                     voltageData.push(obj)
                 }
@@ -72,14 +74,6 @@ export default class Dashboard extends PureComponent {
                 <div>
                     <Layout>
                         <div><img className="logo" src='/ADAC_logo.jpg' style={{position: 'fixed', zIndex: 10}}/></div>
-                        {/*<Header style={{position: 'fixed', zIndex: 1, width: '100%'}}>*/}
-
-                        {/*    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{marginLeft: 80}}>*/}
-                        {/*        <Menu.Item key="1" style={{fontSize: 18}}>Battery 1</Menu.Item>*/}
-                        {/*        <Menu.Item key="2" style={{fontSize: 18}}>Battery 2</Menu.Item>*/}
-                        {/*        <Menu.Item key="3" style={{fontSize: 18}}>Battery 3</Menu.Item>*/}
-                        {/*    </Menu>*/}
-                        {/*</Header>*/}
                         <Content className="site-layout" style={{padding: '0 50px', marginTop: 0}}>
                             <div className="site-layout-background"
                                  style={{padding: 24, minHeight: 700, marginTop: 20, marginLeft: 60}}>

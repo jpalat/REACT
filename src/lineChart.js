@@ -7,25 +7,30 @@ export default class Linechart extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.data = props.data;
+    this.state = {showData:props.data}
   }
 
+  componentWillReceiveProps(nextProps,nextContext){
+      this.setState({showData:nextProps.data})
+  }
 
   render() {
+      let {showData} = this.state
+      console.log("In linechart:",this.data)
     return (
         <div>
 
           <LineChart
               width={800}
               height={600}
-              data={this.data}
+              data={showData}
               margin={{
                 top: 10, right: 20, left: 20, bottom: 5,
               }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="time" />
-            <YAxis type="number" domain={[705,706]}/>
+            <YAxis type="number" domain={[703,706]}/>
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="voltage" stroke="#8884d8" activeDot={{ r: 8 }} />
