@@ -1,9 +1,10 @@
 .logo {
-    width: 83px;
-    height: 267px;
-    left:0;
-    top:0;
-    margin-left:15px;
+    width: 4%;
+    height: 20%;
+    left:26%;
+    top:15%;
+    transform: translate(-26%,-15%);
+    /*margin-left:15px;*/
     /*float: left;*/
 }
 .site-layout .site-layout-background {

@@ -22,13 +22,15 @@ export default class TimePicker extends PureComponent {
 
 
     render() {
+        const { RangePicker } = DatePicker;
+
         return(
-                <>
-                    <DatePicker
-                        showTime={{format: 'HH:mm'}}
-                        onChange={this.onChange}
-                        onOk={this.onOk}/>
-                </>
+            <RangePicker
+                showTime={{ format: 'HH' }}
+                format="YYYY-MM-DD HH:00"
+                onChange={this.onChange}
+                onOk={this.onOk}
+            />
         )
 
 }

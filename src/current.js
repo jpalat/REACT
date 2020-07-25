@@ -31,10 +31,10 @@ const useStyles = makeStyles({
     }
 });
 
-export default function VoltageCard(props) {
+export default function CurrentCard(props) {
     const classes = useStyles();
 
-    let vol = parseFloat(props.latest['voltage'])
+    let vol = parseFloat(props.latest['current'])
     vol = vol.toFixed(2)
     let time_stamp = props.latest['time']
     let len = time_stamp.length
@@ -42,12 +42,12 @@ export default function VoltageCard(props) {
     let amount = props.data.length
     let percentage = 0
 
-    if (props.data[amount-2]['voltage'] != 0){
-        percentage = (props.data[amount-1]['voltage']-props.data[amount-2]['voltage'])/props.data[amount-2]['voltage']
+    if (props.data[amount-2]['current'] != 0){
+        percentage = (props.data[amount-1]['current']-props.data[amount-2]['current'])/props.data[amount-2]['current']
     }
 
     const handleOnclick = function(){
-        history.push({pathname:'/Chart',state:props.data, dataKey:'voltage'})
+        history.push({pathname:'/Chart',state:props.data, dataKey:'current'})
     }
 
 
@@ -60,13 +60,13 @@ export default function VoltageCard(props) {
                 {/*    title="Voltage"*/}
                 {/*/>*/}
                 <CardContent style={{position:'relative', width:'95%', height:'95%'}}>
-                <Typography style={{marginTop:10}} gutterBottom variant="h5" component="h1">
-                    Voltage {vol}
-                </Typography>
-                {/*<Typography variant="body2" color="textSecondary" component="p">*/}
-                {/*    Updated:{time_stamp}*/}
-                {/*</Typography>*/}
-            </CardContent>
+                    <Typography style={{marginTop:10}} gutterBottom variant="h5" component="h1">
+                        Current {vol}
+                    </Typography>
+                    {/*<Typography variant="body2" color="textSecondary" component="p">*/}
+                    {/*    Updated:{time_stamp}*/}
+                    {/*</Typography>*/}
+                </CardContent>
                 <Statistic
                     className={classes.stat}
                     value={percentage}

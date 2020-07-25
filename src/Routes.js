@@ -10,7 +10,7 @@ export default class Routes extends Component {
             <Router history={history}>
                 <Switch>
                     <Route path="/" exact component={App} />
-                    <Route path="/VoltageChart" component={ChartPaper} />
+                    <Route path="/Chart" component={ChartPaper} />
                 </Switch>
             </Router>
         )
