@@ -60,12 +60,6 @@ export default function CenteredGrid(props) {
                                 <h4 style={{position:'relative',left:'10%', textAlign:'center'}}>Updated:{updated}</h4>
                             </Grid>
                         </Grid>
-
-
-
-
-
-
                     </Card>
                 </Grid>
                 <Grid item xs={4}>

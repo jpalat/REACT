@@ -7,8 +7,19 @@ export default class Linechart extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {showData:props.data}
+    this.state = {
+        showData:props.data,
+        refAreaLeft: '',
+        refAreaRight: '',
+        animation: true,
+        width: window.innerWidth,
+        height: window.innerHeight
+    }
     this.key = props.showKey
+    this.x_arr = {}
+    for(var i = 0; i < props.data.length; i++) {
+      this.x_arr[this.data[i][this.keys[0]]] = i
+    }
   }
 
   componentWillReceiveProps(nextProps,nextContext){
@@ -19,6 +30,40 @@ export default class Linechart extends PureComponent {
   handleClick(){
       console.log('select')
   }
+
+  // Scaling
+    zoom() {
+        let { refAreaLeft, refAreaRight } = this.state;
+
+        if (refAreaLeft === refAreaRight || refAreaRight === '') {
+            this.setState(() => ({
+                refAreaLeft: '',
+                refAreaRight: '',
+            }));
+            return;
+        }
+
+        refAreaLeft = this.x_arr[refAreaLeft]
+        refAreaRight = this.x_arr[refAreaRight]
+
+        // xAxis domain
+        if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
+
+        this.setState(() => ({
+            refAreaLeft: '',
+            refAreaRight: '',
+            data: this.data.slice(refAreaLeft, refAreaRight + 1)
+        }));
+    }
+
+    zoomOut() {
+        const { data } = this.state;
+        this.setState(() => ({
+            data: this.initialState.data,
+            refAreaLeft: '',
+            refAreaRight: '',
+        }));
+    }
 
   render() {
       let {showData} = this.state

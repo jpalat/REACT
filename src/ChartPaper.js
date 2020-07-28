@@ -7,6 +7,7 @@ import Dropdown from "./Drop";
 import { Button, Tooltip, Slider } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import moment from "moment"
+import ZoomLineChart from "./ZoomLineChart";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -144,7 +145,7 @@ export default function ChartPaper(props) {
                     {/*</Tooltip>*/}
                 </div>
                 <br></br>
-                <Linechart style={{position:'relative',left:'5%',top:'10%',transform:[`translate(-5%,-10%)`]}} data={showData} showKey={key}/>
+                <ZoomLineChart data={showData} showKey={key}/>
                 {/*<Slider range defaultValue={[0, 24]} max={24} min={0} step={0.5} style={{position:'relative',width:'60%',left:'20%'}}/>*/}
             </Paper>
 
