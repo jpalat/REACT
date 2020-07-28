@@ -1,12 +1,25 @@
-.logo {
-    width: 4%;
-    height: 20%;
-    left:26%;
-    top:15%;
-    transform: translate(-26%,-15%);
+#logo {
+    width: 80%;
     /*margin-left:15px;*/
     /*float: left;*/
 }
-.site-layout .site-layout-background {
-    background: #fff;
+#content {
+    padding: 6% 15%;
+    text-align: center;
+}
+
+#status {
+    text-align: center;
+}
+
+#pic {
+    text-align: right;
+}
+
+.info{
+    color:grey;
+}
+
+#footer{
+    text-align: center;
 }

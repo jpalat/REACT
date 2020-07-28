@@ -23,6 +23,7 @@ export default class ZoomLineChart extends PureComponent {
         for (let i = 1; i<props.data.length;i++){
             this.x_arr[props.data[i]['time']] = i
         }
+        this.width = document.body.clientWidth
 
         console.log("chart",this.initialState['data'])
         console.log("chart key",props)
@@ -131,7 +132,7 @@ export default class ZoomLineChart extends PureComponent {
                 </button>
 
                 <LineChart
-                    width={800}
+                    width={this.width}
                     height={500}
                     data={data}
                     onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
