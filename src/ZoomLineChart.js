@@ -104,6 +104,24 @@ export default class ZoomLineChart extends PureComponent {
         this.initialState['data'] = this.firstData
     }
 
+    handleAreaLeft(e){
+        try{
+            this.setState({ refAreaLeft: e.activeLabel })
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    handleAreaRight(e){
+        try{
+            this.setState({ refAreaRight: e.activeLabel })
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
     render() {
         const {
             data, left, right, refAreaLeft, refAreaRight
@@ -135,8 +153,8 @@ export default class ZoomLineChart extends PureComponent {
                     width={this.width}
                     height={this.height}
                     data={data}
-                    onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
-                    onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
+                    onMouseDown={e => this.handleAreaLeft(e)}
+                    onMouseMove={e => this.state.refAreaLeft && this.handleAreaRight(e)}
                     onMouseUp={this.zoom.bind(this)}
                 >
                     <CartesianGrid strokeDasharray="3 3" />

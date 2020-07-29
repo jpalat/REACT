@@ -18,18 +18,33 @@ export default function ChartPaper(props) {
     let len = data.length;
     let iniData = data.slice(len-20,len)
     let key = props.location.dataKey
+    let dateLength = data[0]['time'].length
+
+    // const initDataSetup=(d)=>{
+    //     let res = []
+    //     let arr = d.slice(len-20,len)
+    //     for (let i =0;i<arr.length;i++){
+    //         let temp = {}
+    //         temp['time'] = data[i]['time'].substr(1,dateLength-2).replace(/\s/g,"<br>")
+    //         temp[key] = data[i][key]
+    //         res.push(temp)
+    //     }
+    //     console.log("after:",res)
+    //     return res
+    // }
 
     const [range,setRange] = React.useState("1min")
     const [date,setDate] = React.useState([])
     const [showData,setShowData] = React.useState(iniData)
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
 
+
+
     const getDate=(d)=>{
         console.log("selected range is",d)
         //setDate(d)
         const newData=[]
             // console.log("choose:",date)
-            let dateLength = data[0]['time'].length
 
             // console.log("lb",lb)
 
@@ -51,7 +66,11 @@ export default function ChartPaper(props) {
                 // console.log(m.isBefore(ub))
                 if (m.isAfter(lb)){
                     if (m.isBefore(ub)) {
-                        newData.push(data[i])
+                        let temp = {}
+                        temp['time'] = data[i]['time'].substr(1,dateLength-2).replace(/\s/g,"\n")
+                        temp[key] = data[i][key]
+                        newData.push(temp)
+                        // newData.push(data[i])
                     }
                     else{
                         flag = true
