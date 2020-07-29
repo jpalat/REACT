@@ -8,16 +8,29 @@ import { SearchOutlined } from '@ant-design/icons';
 import moment from "moment"
 import ZoomLineChart from "./ZoomLineChart";
 import './ChartPaperCSS.css'
+import {ResponsiveContainer} from "recharts";
 
 
 export default function ChartPaper(props) {
     //const classes = useStyles();
 
     // console.log("In chartPaper: ",props.voltage)
-    let data = props.location.state;
+    let data = props.data;
+    let showKey = props.showKey;
+    console.log("In paper,",data)
+    console.log("In paper key", showKey)
+    let dateRange = props.range;
     let len = data.length;
-    let iniData = data.slice(len-20,len)
-    let key = props.location.dataKey
+    let iniData;
+    if (dateRange[0] == 0 && dateRange[1] == 0){
+        iniData = data.slice(len-20,len)
+    }
+    else{
+        iniData = data
+    }
+
+
+
     let dateLength = data[0]['time'].length
 
     // const initDataSetup=(d)=>{
@@ -33,8 +46,8 @@ export default function ChartPaper(props) {
     //     return res
     // }
 
-    const [range,setRange] = React.useState("1min")
-    const [date,setDate] = React.useState([])
+    // const [range,setRange] = React.useState("1min")
+    // const [date,setDate] = React.useState([])
     const [showData,setShowData] = React.useState(iniData)
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
 
@@ -68,7 +81,7 @@ export default function ChartPaper(props) {
                     if (m.isBefore(ub)) {
                         let temp = {}
                         temp['time'] = data[i]['time'].substr(1,dateLength-2).replace(/\s/g,"\n")
-                        temp[key] = data[i][key]
+                        temp[showKey] = data[i][showKey]
                         newData.push(temp)
                         // newData.push(data[i])
                     }
@@ -82,9 +95,9 @@ export default function ChartPaper(props) {
 
     }
 
-    const getRange=(r)=>{
-        setRange(r)
-    }
+    // const getRange=(r)=>{
+    //     setRange(r)
+    // }
 
 
     const onclick=()=>{
@@ -132,12 +145,17 @@ export default function ChartPaper(props) {
         // setShowData(newData)
     }
 
+    const handleBack=()=>{
+        props.callback()
+    }
+
     return (
         <div id='chart'>
                 {/*<div>*/}
                 {/*    <TimePicker callback={getDate}/>*/}
                 {/*</div>*/}
-                <ZoomLineChart  data={showData} showKey={key}/>
+                <ZoomLineChart data={showData} showKey={showKey}/>
+            <Button onClick={handleBack}>back</Button>
         </div>
     )
 }

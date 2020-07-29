@@ -1,7 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Layout, Menu, Breadcrumb, Progress} from 'antd';
 import './dashboardCSS.css'
-import ContentPage from "./Content";
 import Grid from "@material-ui/core/Grid";
 import VoltageCard from "./Voltage";
 import CurrentCard from "./current";
@@ -11,6 +9,7 @@ import SOHCCard from "./SOHC";
 import TimePicker from "./Picker";
 import {Battery} from 'react-little-icon'
 import moment from "moment";
+import ChartPaper from "./ChartPaper";
 
 
 
@@ -19,7 +18,7 @@ export default class Dashboard extends PureComponent {
     constructor(props) {
         super(props);
         this.state={
-            bound:[],
+            bound:[0,0],
             isLoading:false,
             latestData:{},
             voltage:[],
@@ -27,7 +26,10 @@ export default class Dashboard extends PureComponent {
             SOC:[],
             SOHR:[],
             SOHC:[],
+            show:false,
         }
+        this.chartData = null;
+        this.chartKey = '';
     }
 
     componentWillMount() {
@@ -93,22 +95,92 @@ export default class Dashboard extends PureComponent {
                 JSON.stringify(voltageData)
                 JSON.stringify(currentData)
                 console.log(voltageData)
-                this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData})
+                this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData,bound:[0,0],show:false})
                 this.setState({isLoading:false})
             })
     }
 
-    getData(d) {
-        // change latestData (Showing the immediate data at the time selected)
-        this.setState({bound:d})
+    filterData(d,data){
+        let newData = []
+        let lb = d[0]
+        let ub = d[1]
+        let flag = false
+        const dateFormat = "YYYY-MM-DD HH:mm:ss"
+        let dateLength = data[0]['time'].length
+        for (let i = 0;i<data.length;i++){
+            if (flag == true){
+                break
+            }
+            let m = moment(data[i]['time'].substr(1,dateLength-2),dateFormat)
+            if (m.isAfter(lb)){
+                if (m.isBefore(ub)) {
+                    // let temp = {}
+                    // temp['time'] = data[i]['time'].substr(1,dateLength-2).replace(/\s/g,"\n")
+                    // temp[key] = data[i][key]
+                    // newData.push(temp)
+                    newData.push(data[i])
+                }
+                else{
+                    flag = true
+                }
+            }
+        }
+        return newData
     }
 
+    getData(d) {
+        this.setState({bound:d})
+        console.log('d',d)
+        let {voltage,current,SOC,SOHR,SOHC} = this.state
+        let newVol = this.filterData(d,voltage)
+        let newCur = this.filterData(d,current)
+        let newSOC = this.filterData(d,SOC)
+        let newSOHR = this.filterData(d,SOHR)
+        let newSOHC = this.filterData(d,SOHC)
+        this.setState({
+            voltage:newVol,
+            current:newCur,
+            SOC:newSOC,
+            SOHR:newSOHR,
+            SOHC:newSOHC,
+        })
+        // change latestData (Showing the immediate data at the time selected)
+        let latestIndex = newVol.length-1
+        let newLatest = {
+            time: newVol[latestIndex]['time'],
+            voltage: newVol[latestIndex]['voltage'],
+            current: newCur[latestIndex]['current'],
+            SOC: newSOC[latestIndex]['SOC'],
+            SOHR: newSOHR[latestIndex]['SOHR'],
+            SOHC: newSOHC[latestIndex]['SOHC'],
+        }
+        this.setState({latestData: newLatest})
+    }
+
+    clickVoltageChart(){
+        let {voltage} = this.state
+        this.setState({show:true})
+        this.chartData = voltage
+        this.chartKey = 'voltage'
+    }
+
+    handleBack(){
+        this.setState({show:false})
+    }
 
     render() {
-        let {latestData,isLoading,voltage,current,SOC,SOHR,SOHC} = this.state
+        let {latestData,isLoading,voltage,current,SOC,SOHR,SOHC,bound,show} = this.state
+        console.log("in dashboard,SOC",latestData)
         if (isLoading){
             return(
                 <div>Please Wait</div>
+            )
+        }
+        if (show){
+            console.log("dashboard show data",this.chartData)
+            console.log("dashboard show key",this.chartKey)
+            return(
+                <ChartPaper callback={this.handleBack.bind(this)} data={this.chartData} showKey={this.chartKey} range={bound}/>
             )
         }
         else {
@@ -141,25 +213,25 @@ export default class Dashboard extends PureComponent {
                         </Grid>
 
                         <Grid item lg={12} md={12} xs={12}>
-                            <TimePicker callback={this.getData}></TimePicker>
+                            <TimePicker callback={this.getData.bind(this)}></TimePicker>
                         </Grid>
 
-                        <Grid item lg={4} md={8} xs={12}>
-                            <VoltageCard  data={voltage} latest={latestData}/>
+                        <Grid item lg={4} md={4} xs={12}>
+                            <VoltageCard callback={this.clickVoltageChart.bind(this)} bound={bound} data={voltage} latest={latestData}/>
                         </Grid>
-                        <Grid item lg={4} md={8} xs={12}>
-                            <CurrentCard  data={current} latest={latestData}/>
+                        <Grid item lg={4} md={4} xs={12}>
+                            <CurrentCard  bound={bound} data={current} latest={latestData}/>
                         </Grid>
-                        <Grid item lg={4} md={8} xs={12}>
-                            <SOCCard  data={SOC} latest={latestData}/>
+                        <Grid item lg={4} md={4} xs={12}>
+                            <SOCCard  bound={bound} data={SOC} latest={latestData}/>
                         </Grid>
-                        <Grid item lg={4} md={8} xs={12}>
-                            <SOHRCard  data={SOHR} latest={latestData}/>
+                        <Grid item lg={4} md={4} xs={12}>
+                            <SOHRCard  bound={bound} data={SOHR} latest={latestData}/>
                         </Grid>
-                        <Grid item lg={4} md={8} xs={12}>
-                            <SOHCCard  data={SOHC} latest={latestData}/>
+                        <Grid item lg={4} md={4} xs={12}>
+                            <SOHCCard bound={bound} data={SOHC} latest={latestData}/>
                         </Grid>
-                        <Grid item lg={4} md={8} xs={12}>
+                        <Grid item lg={4} md={4} xs={12}>
                             <Grid id="footer" container spacing={1}>
                                 <Grid item lg={9} md={9} xs={9}>
                                     <div >
@@ -178,7 +250,9 @@ export default class Dashboard extends PureComponent {
                                 <Grid item lg={3} md={3} xs={3}>
                                     <div>
                                         <div id='pic'>
-                                            <a href="https://research.ece.ncsu.edu/adac/" title="Click to visit the offical website"><img id="logo" src='/ADAC_logo.jpg'/></a>
+                                            <a href="https://research.ece.ncsu.edu/adac/" title="Click to visit the offical website">
+                                                <img id="logo" src='/ADAC_logo.jpg'/>
+                                            </a>
                                         </div>
                                     </div>
                                 </Grid>

@@ -3,6 +3,7 @@ import {
     Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea, Legend,
 } from 'recharts';
 import { Button } from 'antd';
+import './ChartPaperCSS.css'
 
 
 export default class ZoomLineChart extends PureComponent {
@@ -25,16 +26,19 @@ export default class ZoomLineChart extends PureComponent {
             this.x_arr[props.data[i]['time']] = i
         }
         this.width = 0
+        this.height = 0
         if (document.body.clientWidth < 450){
             this.width = document.body.clientWidth
+            this.height= document.body.clientHeight*0.6
         }
         else{
             this.width = document.body.clientWidth*0.9
+            this.height = document.body.clientHeight*0.6
         }
-        this.height = document.body.clientHeight*0.6
+
 
         console.log("chart",this.initialState['data'])
-        console.log("chart key",props)
+        console.log("chart key",this.key)
         console.log("chart x_arr", this.x_arr)
     }
 
@@ -138,7 +142,7 @@ export default class ZoomLineChart extends PureComponent {
         }
 
         return (
-            <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
+            <div>
 
                 {/*<button*/}
                 {/*    // href="javascript: void(0);"*/}

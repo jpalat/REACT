@@ -7,16 +7,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Routes from './Routes'
 
 ReactDOM.render(
-  // <React.StrictMode>
-  //   <App />
-  // </React.StrictMode>,
-  // document.getElementById('root')
-    <Router>
-        <div>
-            <Routes />
-        </div>
-    </Router>,
-    document.getElementById('root')
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+    // <Router>
+    //     <div>
+    //         <Routes />
+    //     </div>
+    // </Router>,
+    // document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
