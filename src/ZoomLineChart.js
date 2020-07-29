@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import {
     Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea, Legend,
 } from 'recharts';
+import { Button } from 'antd';
 
 
 export default class ZoomLineChart extends PureComponent {
@@ -23,7 +24,14 @@ export default class ZoomLineChart extends PureComponent {
         for (let i = 1; i<props.data.length;i++){
             this.x_arr[props.data[i]['time']] = i
         }
-        this.width = document.body.clientWidth
+        this.width = 0
+        if (document.body.clientWidth < 450){
+            this.width = document.body.clientWidth
+        }
+        else{
+            this.width = document.body.clientWidth*0.9
+        }
+        this.height = document.body.clientHeight*0.6
 
         console.log("chart",this.initialState['data'])
         console.log("chart key",props)
@@ -113,27 +121,19 @@ export default class ZoomLineChart extends PureComponent {
 
         return (
             <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
-                <button
-                    // href="javascript: void(0);"
-                    className="btn update"
-                    onClick={this.zoomOut.bind(this)}
-                    style={{position:'relative'}}
-                >
-                    Zoom Out
 
-                </button>
-                <button
-                    // href="javascript: void(0);"
-                    className="btn update"
-                    onClick={this.back.bind(this)}
-                    style={{position:'absolute',left:'90%'}}
-                >
-                    Refresh
-                </button>
+                {/*<button*/}
+                {/*    // href="javascript: void(0);"*/}
+                {/*    className="btn update"*/}
+                {/*    onClick={this.back.bind(this)}*/}
+                {/*    style={{position:'absolute',left:'90%'}}*/}
+                {/*>*/}
+                {/*    Refresh*/}
+                {/*</button>*/}
 
                 <LineChart
                     width={this.width}
-                    height={500}
+                    height={this.height}
                     data={data}
                     onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
                     onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
@@ -153,7 +153,15 @@ export default class ZoomLineChart extends PureComponent {
                             <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
                     }
                 </LineChart>
+                <Button
+                    // href="javascript: void(0);"
+                    className="btn update"
+                    onClick={this.zoomOut.bind(this)}
+                    style={{position:'relative'}}
+                >
+                    Zoom Out
 
+                </Button>
             </div>
         );
     }

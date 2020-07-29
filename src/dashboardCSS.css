@@ -1,11 +1,12 @@
 #logo {
-    width: 80%;
+    width: 60%;
     /*margin-left:15px;*/
     /*float: left;*/
 }
 #content {
     padding: 6% 15%;
     text-align: center;
+    background-color: aliceblue;
 }
 
 #status {

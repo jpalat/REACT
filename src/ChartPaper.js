@@ -3,36 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Linechart from "./lineChart";
 import TimePicker from "./Picker";
-import Dropdown from "./Drop";
 import { Button, Tooltip, Slider } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import moment from "moment"
 import ZoomLineChart from "./ZoomLineChart";
+import './ChartPaperCSS.css'
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > *': {
-            position:'absolute',
-            width: 850,
-            height: 650,
-            zIndex:100,
-            top:'50%',
-            left:'50%',
-            marginTop:-325,
-            marginLeft:-425,
-            backgroundColor:'#ffffff',
-        },
-    },
-    button:{
-        marginLeft:10
-    },
-}));
 
 export default function ChartPaper(props) {
-    const classes = useStyles();
+    //const classes = useStyles();
 
     // console.log("In chartPaper: ",props.voltage)
     let data = props.location.state;
@@ -135,20 +114,11 @@ export default function ChartPaper(props) {
     }
 
     return (
-        <div className={classes.root}>
-            <Paper>
-                <div>
-                    <TimePicker callback={getDate}/>
-                    {/*<Dropdown callback={getRange}/>*/}
-                    {/*<Tooltip title="search" className={classes.button}>*/}
-                    {/*    <Button type="primary" shape="circle" onClick={onclick} icon={<SearchOutlined/>}/>*/}
-                    {/*</Tooltip>*/}
-                </div>
-                <br></br>
-                <ZoomLineChart data={showData} showKey={key}/>
-                {/*<Slider range defaultValue={[0, 24]} max={24} min={0} step={0.5} style={{position:'relative',width:'60%',left:'20%'}}/>*/}
-            </Paper>
-
+        <div id='chart'>
+                {/*<div>*/}
+                {/*    <TimePicker callback={getDate}/>*/}
+                {/*</div>*/}
+                <ZoomLineChart  data={showData} showKey={key}/>
         </div>
     )
 }

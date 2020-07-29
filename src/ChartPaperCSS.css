@@ -1,0 +1,13 @@
+@media screen and (max-width:450px){
+    #chart {
+        padding: 6% 0%;
+        margin-left: -10px;
+        text-align: center;
+    }
+}
+@media screen and (min-width:450px){
+    #chart {
+        padding: 6% 5%;
+        text-align: center;
+    }
+}

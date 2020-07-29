@@ -8,13 +8,9 @@ import CurrentCard from "./current";
 import SOCCard from "./SOC";
 import SOHRCard from "./SOHR";
 import SOHCCard from "./SOHC";
-import Paper from "@material-ui/core/Paper";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
+import TimePicker from "./Picker";
+import {Battery} from 'react-little-icon'
+import moment from "moment";
 
 
 
@@ -23,9 +19,14 @@ export default class Dashboard extends PureComponent {
     constructor(props) {
         super(props);
         this.state={
+            bound:[],
             isLoading:false,
             latestData:{},
             voltage:[],
+            current:[],
+            SOC:[],
+            SOHR:[],
+            SOHC:[],
         }
     }
 
@@ -46,6 +47,8 @@ export default class Dashboard extends PureComponent {
                 let lines = data.split("\n")
                 let len = lines.length
 
+                this.setState({dataLines:lines})
+
                 // Latest data
                 let lastCell = lines[len - 1].split(",")
                 console.log(lastCell)
@@ -62,7 +65,7 @@ export default class Dashboard extends PureComponent {
 
                 // Voltage data
                 // Default is last 6000 data (pass 5 hours)
-                for(let i = len-6000;i<len;i++){
+                for(let i = 1;i<len;i++){
                     let obj = {}
                     let obj2 = {}
                     let obj3 = {}
@@ -95,6 +98,11 @@ export default class Dashboard extends PureComponent {
             })
     }
 
+    getData(d) {
+        // change latestData (Showing the immediate data at the time selected)
+        this.setState({bound:d})
+    }
+
 
     render() {
         let {latestData,isLoading,voltage,current,SOC,SOHR,SOHC} = this.state
@@ -110,43 +118,33 @@ export default class Dashboard extends PureComponent {
 
             return (
                 <div id='content'>
-                    {/*<Layout>*/}
-                    {/*    <div><img className="logo" src='/ADAC_logo.jpg' style={{position: 'fixed',zIndex: 10}}/></div>*/}
-                    {/*    <Content className="site-layout" style={{padding: '0 50px', marginTop: 0}}>*/}
-                    {/*        <div className="site-layout-background"*/}
-                    {/*             style={{top:'50%', left:'50%',position:'absolute',transform:[`translate(-50%,-50%)`]}}>*/}
-                    {/*            <ContentPage currentData={current} voltageData={voltage} SOCData={SOC} SOHRData={SOHR} SOHCData={SOHC} latest={latestData}/>*/}
-                    {/*        </div>*/}
-                    {/*    </Content>*/}
-                        {/*<Footer style={{textAlign: 'center'}}>ADAC LAB 2020</Footer>*/}
-                    {/*</Layout>*/}
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} xs={12}>
 
-                            {/*<Card bordered={false} >*/}
-                            {/*    /!*style={{position:'relative',left:'10%'}}*!/*/}
-                            {/*    /!*style={{textAlign:'center',position:'relative',right:'10%'}}*!/*/}
-                            {/*    <Grid container spacing={3}>*/}
-                            {/*        <Grid id="status" container item lg={6} md={6} xs={9} >*/}
-                                        <Progress
-                                            type="circle"
-                                            strokeColor={{
-                                                '0%': '#108ee9',
-                                                '100%': '#87d068',
-                                            }}
-                                            percent={parseFloat(latestData['SOC']).toFixed(2)}
-                                        />
-                            {/*        </Grid>*/}
-                            {/*        <Grid container item lg={6} md={6} xs={9} >*/}
-                                        <br></br>
-                                        <br></br>
-                                        <h3 style={{fontWeight:800,textAlign:'center'}}>Your battery is under good condition</h3>
-                                        <h4 style={{textAlign:'center'}}>Updated:{updated}</h4>
-                            {/*        </Grid>*/}
-                            {/*    </Grid>*/}
-                            {/*</Card>*/}
+                            {/*<Progress*/}
+                            {/*    type="circle"*/}
+                            {/*    strokeColor={{*/}
+                            {/*        '0%': '#108ee9',*/}
+                            {/*        '100%': '#87d068',*/}
+                            {/*    }}*/}
+                            {/*    width={140}*/}
+                            {/*    percent={parseFloat(latestData['SOC']).toFixed(2)}*/}
+                            {/*/>*/}
+                            <Battery
+                                size={180}
+                                percent={parseFloat(latestData['SOC']).toFixed(2)}
+                                color="rgb(46,139,87)"
+                            ></Battery>
+                            <br></br>
+                            <h3 style={{fontWeight:800,textAlign:'center'}}>Your battery is under good condition</h3>
+                            <h4 style={{textAlign:'center'}}>Updated:{updated}</h4>
                         </Grid>
-                        <Grid className="card" item lg={4} md={8} xs={12}>
+
+                        <Grid item lg={12} md={12} xs={12}>
+                            <TimePicker callback={this.getData}></TimePicker>
+                        </Grid>
+
+                        <Grid item lg={4} md={8} xs={12}>
                             <VoltageCard  data={voltage} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={8} xs={12}>
@@ -171,7 +169,6 @@ export default class Dashboard extends PureComponent {
                                         <h3 className="info">
                                             North Carolina State University - ADAC LAB -
                                         </h3>
-                                        <br></br>
                                         <br></br>
                                         <h3 className="info">
                                             © 2020

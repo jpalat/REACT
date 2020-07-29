@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
+import {Card} from 'antd';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,6 +10,7 @@ import { Badge } from 'antd';
 import { Statistic } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import history from './History'
+import './Card.css'
 
 
 const useStyles = makeStyles({
@@ -52,34 +53,13 @@ export default function SOHCCard(props) {
 
 
     return (
-        <Card className={classes.root}>
-            <CardActionArea onClick={handleOnclick}>
-                {/*<CardMedia*/}
-                {/*    className={classes.media}*/}
-                {/*    image="/voltage.jpg"*/}
-                {/*    title="Voltage"*/}
-                {/*/>*/}
-                <CardContent style={{position:'relative', width:'95%', height:'95%'}}>
-                    <Typography style={{marginTop:10}} gutterBottom variant="h5" component="h1">
-                        SOHC {vol}
-                    </Typography>
-                    {/*<Typography variant="body2" color="textSecondary" component="p">*/}
-                    {/*    Updated:{time_stamp}*/}
-                    {/*</Typography>*/}
-                </CardContent>
-                <Statistic
-                    className={classes.stat}
-                    value={percentage}
-                    precision={2}
-                    valueStyle={{ fontSize:35, color: '#3f8600' }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="%"
-                />
-
-            </CardActionArea>
-            <CardActions>
-
-            </CardActions>
+        <Card className="card" onClick={handleOnclick} hoverable bordered>
+            <Typography gutterBottom variant="h5" component="h1">
+                SOHC
+            </Typography>
+            <Typography style={{marginTop:10}} variant="h4" component="h1">
+                {vol}
+            </Typography>
         </Card>
     );
 }
