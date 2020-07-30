@@ -11,7 +11,8 @@ export default function CurrentCard(props) {
     vol = vol.toFixed(2)
 
     const handleOnclick = function(){
-        history.push({pathname:'/Chart',range:props.bound, state:props.data, dataKey:'current'})
+        // history.push({pathname:'/Chart',range:props.bound, state:props.data, dataKey:'current'})
+        props.callback()
     }
 
 

@@ -164,6 +164,34 @@ export default class Dashboard extends PureComponent {
         this.chartKey = 'voltage'
     }
 
+    clickCurrentChart(){
+        let {current} = this.state
+        this.setState({show:true})
+        this.chartData = current
+        this.chartKey = 'current'
+    }
+
+    clickSOCChart(){
+        let {SOC} = this.state
+        this.setState({show:true})
+        this.chartData = SOC
+        this.chartKey = 'SOC'
+    }
+
+    clickSOHRChart(){
+        let {SOHR} = this.state
+        this.setState({show:true})
+        this.chartData = SOHR
+        this.chartKey = 'SOHR'
+    }
+
+    clickSOHCChart(){
+        let {SOHC} = this.state
+        this.setState({show:true})
+        this.chartData = SOHC
+        this.chartKey = 'SOHC'
+    }
+
     handleBack(){
         this.setState({show:false})
     }
@@ -220,16 +248,16 @@ export default class Dashboard extends PureComponent {
                             <VoltageCard callback={this.clickVoltageChart.bind(this)} bound={bound} data={voltage} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
-                            <CurrentCard  bound={bound} data={current} latest={latestData}/>
+                            <CurrentCard callback={this.clickCurrentChart.bind(this)} bound={bound} data={current} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
-                            <SOCCard  bound={bound} data={SOC} latest={latestData}/>
+                            <SOCCard callback={this.clickSOCChart.bind(this)} bound={bound} data={SOC} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
-                            <SOHRCard  bound={bound} data={SOHR} latest={latestData}/>
+                            <SOHRCard callback={this.clickSOHRChart.bind(this)} bound={bound} data={SOHR} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
-                            <SOHCCard bound={bound} data={SOHC} latest={latestData}/>
+                            <SOHCCard callback={this.clickSOHCChart.bind(this)} bound={bound} data={SOHC} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
                             <Grid id="footer" container spacing={1}>

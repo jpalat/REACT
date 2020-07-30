@@ -11,7 +11,8 @@ export default function SOHCCard(props) {
     vol = vol.toFixed(2)
 
     const handleOnclick = function(){
-        history.push({pathname:'/Chart',range:props.bound,state:props.data, dataKey:'SOHC'})
+        // history.push({pathname:'/Chart',range:props.bound,state:props.data, dataKey:'SOHC'})
+        props.callback()
     }
 
 

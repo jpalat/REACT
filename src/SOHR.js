@@ -10,7 +10,8 @@ export default function SOHRCard(props) {
     vol = vol.toFixed(2)
 
     const handleOnclick = function(){
-        history.push({pathname:'/Chart',range:props.bound,state:props.data, dataKey:'SOHR'})
+        // history.push({pathname:'/Chart',range:props.bound,state:props.data, dataKey:'SOHR'})
+        props.callback()
     }
 
 
