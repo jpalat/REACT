@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush,
-    AreaChart, Area,
 } from 'recharts';
 
 export default class SyncChart extends PureComponent {
@@ -15,6 +14,7 @@ export default class SyncChart extends PureComponent {
     }
 
     render() {
+
         return (
             <div>
                 <h2> Voltage VS Current</h2>
@@ -27,15 +27,15 @@ export default class SyncChart extends PureComponent {
                         top: 0, right: 30, left: 0, bottom: 15,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis dataKey="time" />
-                    <YAxis yAxisId="left" domain={[705,706]}/>
-                    <YAxis yAxisId="right" domain={[-1,1]} orientation="right" />
+                    <YAxis yAxisId="left" domain={[705,706]} orientation="left" label ={{ value: "Voltage", position: "insideTopLeft",dy:10}}/>
+                    <YAxis yAxisId="right" domain={[-1,1]} orientation="right" label ={{ value: "Current", position: "insideTopRight", dy:10}}/>
                     <Tooltip />
                     <Legend />
                     <Line yAxisId="left" type="monotone" dataKey="voltage" stroke="#8884d8" activeDot={{ r: 8 }} />
                     <Line yAxisId="right" type="monotone" dataKey="current" stroke="#82ca9d" activeDot={{ r: 8 }}/>
-                    <Brush />
+
                 </LineChart>
                 <h2> SOC / SOHR / SOHC</h2>
                 <LineChart
@@ -48,13 +48,13 @@ export default class SyncChart extends PureComponent {
                     }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="time" />
                     <YAxis type="number" domain={[0, 100]}/>
                     <Tooltip />
                     <Line type="monotone" dataKey='SOC' stroke="#8884d8" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey='SOHR' stroke="#82ca9d" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey='SOHC' stroke="#F08080" activeDot={{ r: 8 }} />
-
+                    <Brush />
                 </LineChart>
             </div>
         );
