@@ -10,8 +10,8 @@ import TimePicker from "./Picker";
 import {Battery} from 'react-little-icon'
 import moment from "moment";
 import ChartPaper from "./ChartPaper";
-
-
+import CompCard from "./Comparison";
+//import {run} from "./GoogleGet"
 
 export default class Dashboard extends PureComponent {
 
@@ -22,10 +22,7 @@ export default class Dashboard extends PureComponent {
             isLoading:false,
             latestData:{},
             voltage:[],
-            current:[],
-            SOC:[],
-            SOHR:[],
-            SOHC:[],
+            data:[],
             show:false,
         }
         this.chartData = null;
@@ -35,11 +32,7 @@ export default class Dashboard extends PureComponent {
     componentWillMount() {
         this.setState({isLoading: true})
         let temp = {}
-        let voltageData=[]
-        let currentData=[]
-        let SOCData = []
-        let SOHRData = []
-        let SOHCData = []
+        let tempData=[]
 
         fetch("/BMS_Realtime_output.csv")
             .then(v => v.text())
@@ -77,27 +70,37 @@ export default class Dashboard extends PureComponent {
                     let cells = lines[i].split(",")
                     //let l = cells[0].length
                     obj['time']=cells[0]
-                    obj['voltage']=parseFloat(cells[1])
-                    obj2['time'] = cells[0]
-                    obj2['current']=parseFloat(cells[2])
-                    obj3['time'] = cells[0]
-                    obj3['SOC']=parseFloat(cells[3])
-                    obj4['time'] = cells[0]
-                    obj4['SOHR']=parseFloat(cells[4])
-                    obj5['time'] = cells[0]
-                    obj5['SOHC']=parseFloat(cells[5])
-                    voltageData.push(obj)
-                    currentData.push(obj2)
-                    SOCData.push(obj3)
-                    SOHRData.push(obj4)
-                    SOHCData.push(obj5)
+                    obj['voltage']=parseFloat(cells[1]).toFixed(2)
+                    // obj2['time'] = cells[0]
+                    obj['current']=parseFloat(cells[2]).toFixed(2)
+                    // obj3['time'] = cells[0]
+                    obj['SOC']=parseFloat(cells[3]).toFixed(2)
+                    // obj4['time'] = cells[0]
+                    obj['SOHR']=parseFloat(cells[4]).toFixed(2)
+                    // obj5['time'] = cells[0]
+                    obj['SOHC']=parseFloat(cells[5]).toFixed(2)
+                    tempData.push(obj)
+                    // currentData.push(obj2)
+                    // SOCData.push(obj3)
+                    // SOHRData.push(obj4)
+                    // SOHCData.push(obj5)
                 }
-                JSON.stringify(voltageData)
-                JSON.stringify(currentData)
-                console.log(voltageData)
-                this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData,bound:[0,0],show:false})
+                JSON.stringify(tempData)
+                // JSON.stringify(currentData)
+                console.log(tempData)
+                //this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData,bound:[0,0],show:false})
+                this.setState({data:tempData})
                 this.setState({isLoading:false})
+                setInterval(this.handleNewData.bind(this), 10000)
             })
+    }
+
+    handleNewData(){
+        // console.log("10 seconds passed, starting update...")
+        // Download another set of data
+        // Set up new data
+        // Set state
+        // this.setState({isLoading:true})
     }
 
     filterData(d,data){
@@ -131,69 +134,74 @@ export default class Dashboard extends PureComponent {
     getData(d) {
         this.setState({bound:d})
         console.log('d',d)
-        let {voltage,current,SOC,SOHR,SOHC} = this.state
-        let newVol = this.filterData(d,voltage)
-        let newCur = this.filterData(d,current)
-        let newSOC = this.filterData(d,SOC)
-        let newSOHR = this.filterData(d,SOHR)
-        let newSOHC = this.filterData(d,SOHC)
+        // let {voltage,current,SOC,SOHR,SOHC} = this.state
+        // let newVol = this.filterData(d,voltage)
+        // let newCur = this.filterData(d,current)
+        // let newSOC = this.filterData(d,SOC)
+        // let newSOHR = this.filterData(d,SOHR)
+        // let newSOHC = this.filterData(d,SOHC)
+        let {data} = this.state
+        let newData = this.filterData(d,data)
         this.setState({
-            voltage:newVol,
-            current:newCur,
-            SOC:newSOC,
-            SOHR:newSOHR,
-            SOHC:newSOHC,
+            data:newData
         })
         // change latestData (Showing the immediate data at the time selected)
-        let latestIndex = newVol.length-1
+        let latestIndex = newData.length-1
         let newLatest = {
-            time: newVol[latestIndex]['time'],
-            voltage: newVol[latestIndex]['voltage'],
-            current: newCur[latestIndex]['current'],
-            SOC: newSOC[latestIndex]['SOC'],
-            SOHR: newSOHR[latestIndex]['SOHR'],
-            SOHC: newSOHC[latestIndex]['SOHC'],
+            time: newData[latestIndex]['time'],
+            voltage: newData[latestIndex]['voltage'],
+            current: newData[latestIndex]['current'],
+            SOC: newData[latestIndex]['SOC'],
+            SOHR: newData[latestIndex]['SOHR'],
+            SOHC: newData[latestIndex]['SOHC'],
         }
         this.setState({latestData: newLatest})
     }
 
     clickVoltageChart(){
-        let {voltage} = this.state
+        let {data} = this.state
         this.setState({show:true})
-        this.chartData = voltage
+        this.chartData = data
         this.chartKey = 'voltage'
     }
 
     clickCurrentChart(){
-        let {current} = this.state
+        let {data} = this.state
         this.setState({show:true})
-        this.chartData = current
+        this.chartData = data
         this.chartKey = 'current'
     }
 
     clickSOCChart(){
-        let {SOC} = this.state
+        let {data} = this.state
         this.setState({show:true})
-        this.chartData = SOC
+        this.chartData = data
         this.chartKey = 'SOC'
     }
 
     clickSOHRChart(){
-        let {SOHR} = this.state
+        let {data} = this.state
         this.setState({show:true})
-        this.chartData = SOHR
+        this.chartData = data
         this.chartKey = 'SOHR'
     }
 
     clickSOHCChart(){
-        let {SOHC} = this.state
+        let {data} = this.state
         this.setState({show:true})
-        this.chartData = SOHC
+        this.chartData = data
         this.chartKey = 'SOHC'
     }
 
     handleBack(){
         this.setState({show:false})
+    }
+
+    clickSeeAllChart(){
+        let {data} = this.state
+        this.setState({show:true})
+        this.chartData = data
+        this.chartKey = 'all'
     }
 
     render() {
@@ -216,28 +224,25 @@ export default class Dashboard extends PureComponent {
             const len = updated.length;
             updated = updated.substr(1,len-2);
 
+            if (bound[0]!==0 && bound[1]!==0){
+                updated = bound[0].format("YYYY-MM-DD HH:mm:ss")+' to '+bound[1].format("YYYY-MM-DD HH:mm:ss")
+            }
+            else{
+                let temp = 'Updated: '+updated
+                updated = temp
+            }
+
             return (
                 <div id='content'>
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} xs={12}>
-
-                            {/*<Progress*/}
-                            {/*    type="circle"*/}
-                            {/*    strokeColor={{*/}
-                            {/*        '0%': '#108ee9',*/}
-                            {/*        '100%': '#87d068',*/}
-                            {/*    }}*/}
-                            {/*    width={140}*/}
-                            {/*    percent={parseFloat(latestData['SOC']).toFixed(2)}*/}
-                            {/*/>*/}
                             <Battery
                                 size={180}
                                 percent={parseFloat(latestData['SOC']).toFixed(2)}
                                 color="rgb(46,139,87)"
                             ></Battery>
-                            <br></br>
                             <h3 style={{fontWeight:800,textAlign:'center'}}>Your battery is under good condition</h3>
-                            <h4 style={{textAlign:'center'}}>Updated:{updated}</h4>
+                            <h3 style={{textAlign:'center'}}>{updated}</h3>
                         </Grid>
 
                         <Grid item lg={12} md={12} xs={12}>
@@ -260,6 +265,9 @@ export default class Dashboard extends PureComponent {
                             <SOHCCard callback={this.clickSOHCChart.bind(this)} bound={bound} data={SOHC} latest={latestData}/>
                         </Grid>
                         <Grid item lg={4} md={4} xs={12}>
+                            <CompCard callback={this.clickSeeAllChart.bind(this)} />
+                        </Grid>
+                        <Grid item lg={12} md={12} xs={12}>
                             <Grid id="footer" container spacing={1}>
                                 <Grid item lg={9} md={9} xs={9}>
                                     <div >
@@ -269,7 +277,6 @@ export default class Dashboard extends PureComponent {
                                         <h3 className="info">
                                             North Carolina State University - ADAC LAB -
                                         </h3>
-                                        <br></br>
                                         <h3 className="info">
                                             © 2020
                                         </h3>

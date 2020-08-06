@@ -1,14 +1,16 @@
 import React, {PureComponent} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Linechart from "./lineChart";
-import TimePicker from "./Picker";
+// import { makeStyles } from '@material-ui/core/styles';
+// import Paper from '@material-ui/core/Paper';
+// import Linechart from "./lineChart";
+// import TimePicker from "./Picker";
 import { Button, Tooltip, Slider } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { LeftSquareOutlined } from '@ant-design/icons';
 import moment from "moment"
 import ZoomLineChart from "./ZoomLineChart";
 import './ChartPaperCSS.css'
-import {ResponsiveContainer} from "recharts";
+import MobileChart from "./lineChart";
+import SyncChart from "./SyncChart";
+// import {ResponsiveContainer} from "recharts";
 
 
 export default function ChartPaper(props) {
@@ -21,6 +23,7 @@ export default function ChartPaper(props) {
     console.log("In paper key", showKey)
     let dateRange = props.range;
     let len = data.length;
+    let width = document.body.clientWidth
     let iniData;
     if (dateRange[0] == 0 && dateRange[1] == 0){
         iniData = data.slice(len-20,len)
@@ -149,13 +152,26 @@ export default function ChartPaper(props) {
         props.callback()
     }
 
-    return (
-        <div id='chart'>
+    if (showKey !== 'all'){
+        return (
+            <div id='chart'>
                 {/*<div>*/}
                 {/*    <TimePicker callback={getDate}/>*/}
                 {/*</div>*/}
-                <ZoomLineChart data={showData} showKey={showKey}/>
-            <Button onClick={handleBack}>back</Button>
-        </div>
-    )
+                {(width>450)?<ZoomLineChart data={showData} showKey={showKey}/>:<MobileChart data={showData} showKey={showKey}/>}
+                <Button style={{marginTop:10}} onClick={handleBack} icon={<LeftSquareOutlined />}>back</Button>
+            </div>
+        )
+    }
+    else {
+        return(
+            <div id='all'>
+                {/*<TwoAxis data={showData}/>*/}
+                {/*<ZoomLineChart data={showData} showKey={showKey}/>*/}
+                <SyncChart data={showData}/>
+                <Button style={{marginTop:10}} onClick={handleBack} icon={<LeftSquareOutlined />}>back</Button>
+            </div>
+        )
+    }
+
 }

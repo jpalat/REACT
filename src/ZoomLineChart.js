@@ -4,7 +4,8 @@ import {
 } from 'recharts';
 import { Button } from 'antd';
 import './ChartPaperCSS.css'
-
+import { CloseOutlined } from '@ant-design/icons';
+import DefaultTooltipContent from 'recharts/lib/component/DefaultTooltipContent';
 
 export default class ZoomLineChart extends PureComponent {
     // static jsfiddleUrl = 'https://jsfiddle.net/alidingling/nhpemhgs/';
@@ -33,7 +34,7 @@ export default class ZoomLineChart extends PureComponent {
         }
         else{
             this.width = document.body.clientWidth*0.9
-            this.height = document.body.clientHeight*0.6
+            this.height = document.body.clientHeight*0.4
         }
 
 
@@ -109,21 +110,23 @@ export default class ZoomLineChart extends PureComponent {
     }
 
     handleAreaLeft(e){
-        try{
-            this.setState({ refAreaLeft: e.activeLabel })
-        }
-        catch (err) {
-            console.log(err)
-        }
+        // try{
+        //     this.setState({ refAreaLeft: e.activeLabel })
+        // }
+        // catch (err) {
+        //     console.log(err)
+        // }
+        this.setState({ refAreaLeft: e.activeLabel })
     }
 
     handleAreaRight(e){
-        try{
-            this.setState({ refAreaRight: e.activeLabel })
-        }
-        catch (err) {
-            console.log(err)
-        }
+        // try{
+        //     this.setState({ refAreaRight: e.activeLabel })
+        // }
+        // catch (err) {
+        //     console.log(err)
+        // }
+        this.setState({ refAreaRight: e.activeLabel })
     }
 
     render() {
@@ -141,50 +144,226 @@ export default class ZoomLineChart extends PureComponent {
             range[1] = 5
         }
 
-        return (
-            <div>
-
-                {/*<button*/}
-                {/*    // href="javascript: void(0);"*/}
-                {/*    className="btn update"*/}
-                {/*    onClick={this.back.bind(this)}*/}
-                {/*    style={{position:'absolute',left:'90%'}}*/}
-                {/*>*/}
-                {/*    Refresh*/}
-                {/*</button>*/}
-
-                <LineChart
-                    width={this.width}
-                    height={this.height}
-                    data={data}
-                    onMouseDown={e => this.handleAreaLeft(e)}
-                    onMouseMove={e => this.state.refAreaLeft && this.handleAreaRight(e)}
-                    onMouseUp={this.zoom.bind(this)}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                        allowDecimals={false}
-                        dataKey="time"
-                    />
-                    <YAxis type="number" domain={range}/>
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey={this.key} stroke="#8884d8" activeDot={{ r: 8 }} />
+        const CustomTooltip = props => {
+            // we don't need to check payload[0] as there's a better prop for this purpose
+            if (!props.active) {
+                // I think returning null works based on this: http://recharts.org/en-US/examples/CustomContentOfTooltip
+                return null
+            }
+            // console.log("payload is",props.payload)
+            // mutating props directly is against react's conventions
+            // so we create a new payload with the name and value fields set to what we want
+            let newPayload = []
+            if (props.payload[0].name === 'voltage'){
+                newPayload = [
+                    ...props.payload,
                     {
-                        (refAreaLeft && refAreaRight) ? (
-                            <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
-                    }
-                </LineChart>
-                <Button
-                    // href="javascript: void(0);"
-                    className="btn update"
-                    onClick={this.zoomOut.bind(this)}
-                    style={{position:'relative'}}
-                >
-                    Zoom Out
+                        name: 'SOC',
+                        // all your data which created the tooltip is located in the .payload property
+                        value: props.payload[0].payload.SOC,
+                        // you can also add "unit" here if you need it
+                    },
+                    {
+                        name:'current',
+                        value:props.payload[0].payload.current,
+                    },
+                    {
+                        name:'SOHR',
+                        value:props.payload[0].payload.SOHR,
+                    },
+                    {
+                        name:'SOHC',
+                        value:props.payload[0].payload.SOHC,
+                    },
 
-                </Button>
-            </div>
-        );
+                ];
+            }
+            if (props.payload[0].name === 'current'){
+                newPayload = [
+                    ...props.payload,
+                    {
+                    name:'voltage',
+                    value:props.payload[0].payload.voltage,
+                    },
+                    {
+                        name: 'SOC',
+                        // all your data which created the tooltip is located in the .payload property
+                        value: props.payload[0].payload.SOC,
+                        // you can also add "unit" here if you need it
+                    },
+
+                    {
+                        name:'SOHR',
+                        value:props.payload[0].payload.SOHR,
+                    },
+                    {
+                        name:'SOHC',
+                        value:props.payload[0].payload.SOHC,
+                    },
+
+                ];
+            }
+            if (props.payload[0].name === 'SOC'){
+                newPayload = [
+                    ...props.payload,
+                    {
+                        name: 'voltage',
+                        // all your data which created the tooltip is located in the .payload property
+                        value: props.payload[0].payload.voltage,
+                        // you can also add "unit" here if you need it
+                    },
+                    {
+                        name:'current',
+                        value:props.payload[0].payload.current,
+                    },
+                    {
+                        name:'SOHR',
+                        value:props.payload[0].payload.SOHR,
+                    },
+                    {
+                        name:'SOHC',
+                        value:props.payload[0].payload.SOHC,
+                    },
+
+                ];
+            }
+            if (props.payload[0].name === 'SOHR'){
+                newPayload = [
+                    ...props.payload,
+                    {
+                    name:'voltage',
+                    value:props.payload[0].payload.voltage,
+                    },
+                    {
+                        name:'current',
+                        value:props.payload[0].payload.current,
+                    },
+                    {
+                        name: 'SOC',
+                        // all your data which created the tooltip is located in the .payload property
+                        value: props.payload[0].payload.SOC,
+                        // you can also add "unit" here if you need it
+                    },
+                    {
+                        name:'SOHC',
+                        value:props.payload[0].payload.SOHC,
+                    },
+
+                ];
+            }
+            if (props.payload[0].name === 'SOHC'){
+                newPayload = [
+                    ...props.payload,
+                    {
+                        name:'voltage',
+                        value:props.payload[0].payload.voltage,
+                    },
+                    {
+                        name:'current',
+                        value:props.payload[0].payload.current,
+                    },
+                    {
+                        name: 'SOC',
+                        // all your data which created the tooltip is located in the .payload property
+                        value: props.payload[0].payload.SOC,
+                        // you can also add "unit" here if you need it
+                    },
+                    {
+                        name:'SOHR',
+                        value:props.payload[0].payload.SOHR,
+                    },
+                ];
+            }
+            return <DefaultTooltipContent {...props} payload={newPayload} />;
+        };
+
+        if (this.key !== 'all'){
+            return (
+                <div>
+
+                    {/*<button*/}
+                    {/*    // href="javascript: void(0);"*/}
+                    {/*    className="btn update"*/}
+                    {/*    onClick={this.back.bind(this)}*/}
+                    {/*    style={{position:'absolute',left:'90%'}}*/}
+                    {/*>*/}
+                    {/*    Refresh*/}
+                    {/*</button>*/}
+
+                    <LineChart
+                        width={this.width}
+                        height={this.height}
+                        data={data}
+                        onMouseDown={e => this.handleAreaLeft(e)}
+                        onMouseMove={e => this.state.refAreaLeft && this.handleAreaRight(e)}
+                        onMouseUp={this.zoom.bind(this)}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            allowDecimals={false}
+                            dataKey="time"
+                        />
+                        <YAxis type="number" domain={range}/>
+                        <Tooltip content={CustomTooltip}/>
+                        <Legend />
+                        <Line type="monotone" dataKey={this.key} stroke="#8884d8" activeDot={{ r: 8 }} />
+                        {
+                            (refAreaLeft && refAreaRight) ? (
+                                <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
+                        }
+                    </LineChart>
+                    <Button
+                        // href="javascript: void(0);"
+                        className="btn update"
+                        onClick={this.zoomOut.bind(this)}
+                        style={{position:'relative'}}
+                        icon={<CloseOutlined />}
+                    >
+                        Zoom Out
+
+                    </Button>
+                </div>
+            );
+        }
+        else {
+            return(
+                <div>
+                    <LineChart
+                        width={this.width*0.93}
+                        height={this.height}
+                        data={data}
+                        onMouseDown={e => this.handleAreaLeft(e)}
+                        onMouseMove={e => this.state.refAreaLeft && this.handleAreaRight(e)}
+                        onMouseUp={this.zoom.bind(this)}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            allowDecimals={false}
+                            dataKey="time"
+                        />
+                        <YAxis type="number" domain={range}/>
+                        <Tooltip/>
+                        <Legend />
+                        <Line type="monotone" dataKey='SOC' stroke="#8884d8" activeDot={{ r: 8 }} />
+                        <Line type="monotone" dataKey='SOHR' stroke="#82ca9d" activeDot={{ r: 8 }} />
+                        <Line type="monotone" dataKey='SOHC' stroke="#F08080" activeDot={{ r: 8 }} />
+                        {
+                            (refAreaLeft && refAreaRight) ? (
+                                <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />) : null
+                        }
+                    </LineChart>
+                    <Button
+                        // href="javascript: void(0);"
+                        className="btn update"
+                        onClick={this.zoomOut.bind(this)}
+                        style={{position:'relative'}}
+                        icon={<CloseOutlined />}
+                    >
+                        Zoom Out
+
+                    </Button>
+                </div>
+            );
+        }
     }
 }
