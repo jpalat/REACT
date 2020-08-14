@@ -137,7 +137,7 @@ export default class ZoomLineChart extends PureComponent {
         let range = [0,100]
         if (this.key=='voltage'){
             range[0] = 705
-            range[1] = 706
+            range[1] = 707
         }
         else if (this.key == 'current'){
             range[0] = -5

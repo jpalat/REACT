@@ -27,6 +27,7 @@ export default class Dashboard extends PureComponent {
         }
         this.chartData = null;
         this.chartKey = '';
+        this.lastUpdate = '';
     }
 
     componentWillMount() {
@@ -34,73 +35,125 @@ export default class Dashboard extends PureComponent {
         let temp = {}
         let tempData=[]
 
-        fetch("/BMS_Realtime_output.csv")
-            .then(v => v.text())
+        // fetch("/BMS_Realtime_output.csv")
+        //         .then(v => v.text())
+        //         .then(data => {
+        //         //console.log(data)
+
+        fetch("http://localhost:5000/init")
+            .then(v => v.json())
             .then(data => {
-                //console.log(data)
 
-                let lines = data.split("\n")
-                let len = lines.length
+                console.log("data is",data)
+                data = data.data
 
-                this.setState({dataLines:lines})
+                // let lines = data.split("\n")
+                let len = data.length
 
                 // Latest data
-                let lastCell = lines[len - 1].split(",")
-                console.log(lastCell)
+                let lastCell = data[len - 1]
                 temp = {
-                    time: lastCell[0],
-                    voltage: lastCell[1],
-                    current: lastCell[2],
-                    SOC: lastCell[3],
-                    SOHR: lastCell[4],
-                    SOHC: lastCell[5],
+                    time: lastCell['time'],
+                    voltage: lastCell['voltage'],
+                    current: lastCell['current'],
+                    SOC: lastCell['SOC'],
+                    SOHR: lastCell['SOHR'],
+                    SOHC: lastCell['SOHC'],
                 }
-                console.log(temp)
+                console.log("temp is",temp)
+                this.lastUpdate = lastCell['time']
                 this.setState({latestData: temp})
 
                 // Voltage data
-                // Default is last 6000 data (pass 5 hours)
-                for(let i = 1;i<len;i++){
+                for(let i = 0;i<len;i++){
                     let obj = {}
-                    let obj2 = {}
-                    let obj3 = {}
-                    let obj4 = {}
-                    let obj5 = {}
 
-                    let cells = lines[i].split(",")
-                    //let l = cells[0].length
-                    obj['time']=cells[0]
-                    obj['voltage']=parseFloat(cells[1]).toFixed(2)
-                    // obj2['time'] = cells[0]
-                    obj['current']=parseFloat(cells[2]).toFixed(2)
-                    // obj3['time'] = cells[0]
-                    obj['SOC']=parseFloat(cells[3]).toFixed(2)
-                    // obj4['time'] = cells[0]
-                    obj['SOHR']=parseFloat(cells[4]).toFixed(2)
-                    // obj5['time'] = cells[0]
-                    obj['SOHC']=parseFloat(cells[5]).toFixed(2)
+                    let cells = data[i]
+                    obj['time']=cells['time']
+                    obj['voltage']=parseFloat(cells['voltage']).toFixed(2)
+                    obj['current']=parseFloat(cells['current']).toFixed(2)
+                    obj['SOC']=parseFloat(cells['SOC']).toFixed(2)
+                    obj['SOHR']=parseFloat(cells['SOHR']).toFixed(2)
+                    obj['SOHC']=parseFloat(cells['SOHC']).toFixed(2)
                     tempData.push(obj)
-                    // currentData.push(obj2)
-                    // SOCData.push(obj3)
-                    // SOHRData.push(obj4)
-                    // SOHCData.push(obj5)
                 }
                 JSON.stringify(tempData)
                 // JSON.stringify(currentData)
-                console.log(tempData)
+                console.log("temp data is ",tempData)
                 //this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData,bound:[0,0],show:false})
                 this.setState({data:tempData})
                 this.setState({isLoading:false})
-                setInterval(this.handleNewData.bind(this), 10000)
+                setInterval(this.handleNewData.bind(this), 15000)
             })
     }
 
     handleNewData(){
-        // console.log("10 seconds passed, starting update...")
-        // Download another set of data
-        // Set up new data
-        // Set state
-        // this.setState({isLoading:true})
+        let url = "http://localhost:5000/update?time="+this.lastUpdate.replace(/\s+/g,"-").replace(/:/g,"-");
+        let temp = {}
+        let pastData = this.state.data
+        let newData = []
+
+
+
+        console.log("url is",url)
+        fetch(url)
+            .then(response=>response.json())
+            .then(data => {
+                data = data.data
+                if (data.length === 0){
+                    return;
+                }
+
+                for (let i = 0; i < pastData.length; i++){
+                    let t = {
+                        time: pastData[i]['time'],
+                        voltage: pastData[i]['voltage'],
+                        current: pastData[i]['current'],
+                        SOC: pastData[i]['SOC'],
+                        SOHR: pastData[i]['SOHR'],
+                        SOHC: pastData[i]['SOHC'],
+                    }
+                    newData.push(t)
+                }
+
+                // let lines = data.split("\n")
+                let len = data.length
+
+                // Latest data
+                let lastCell = data[len - 1]
+                console.log("last cell is,",lastCell)
+                temp = {
+                    time: lastCell['time'],
+                    voltage: lastCell['voltage'],
+                    current: lastCell['current'],
+                    SOC: lastCell['SOC'],
+                    SOHR: lastCell['SOHR'],
+                    SOHC: lastCell['SOHC'],
+                }
+                console.log("temp is",temp)
+                this.lastUpdate = lastCell['time']
+                this.setState({latestData: temp})
+
+                // Append data
+                for(let i = 0;i<len;i++){
+                    let obj = {}
+
+                    let cells = data[i]
+                    obj['time']=cells['time']
+                    obj['voltage']=parseFloat(cells['voltage']).toFixed(2)
+                    obj['current']=parseFloat(cells['current']).toFixed(2)
+                    obj['SOC']=parseFloat(cells['SOC']).toFixed(2)
+                    obj['SOHR']=parseFloat(cells['SOHR']).toFixed(2)
+                    obj['SOHC']=parseFloat(cells['SOHC']).toFixed(2)
+                    newData.push(obj)
+                }
+                JSON.stringify(newData)
+                // JSON.stringify(currentData)
+                console.log("temp data is ",newData)
+                //this.setState({voltage:voltageData, current:currentData, SOC:SOCData, SOHR:SOHRData, SOHC:SOHCData,bound:[0,0],show:false})
+                this.setState({data:newData})
+                this.setState({isLoading:false})
+            })
     }
 
     filterData(d,data){
