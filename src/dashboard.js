@@ -40,7 +40,7 @@ export default class Dashboard extends PureComponent {
         //         .then(data => {
         //         //console.log(data)
 
-        fetch("http://localhost:5000/init")
+        fetch("https://api.smart-battery-gauge.xyz/init")
             .then(v => v.json())
             .then(data => {
 
@@ -88,7 +88,7 @@ export default class Dashboard extends PureComponent {
     }
 
     handleNewData(){
-        let url = "http://localhost:5000/update?time="+this.lastUpdate.replace(/\s+/g,"-").replace(/:/g,"-");
+        let url = "https://api.smart-battery-gauge.xyz/update?time="+this.lastUpdate.replace(/\s+/g,"-").replace(/:/g,"-");
         let temp = {}
         let pastData = this.state.data
         let newData = []

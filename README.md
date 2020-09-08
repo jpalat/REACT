@@ -43,26 +43,17 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Building with Docker
 
-### Analyzing the Bundle Size
+Docker:
+docker build   -t sbgreact_build:0.2 .
+docker run  -it -v `pwd`/bb:/app/build sbgreact_build:0.2
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+I am running with VMWare Fusion locally and it requires additional memory allocated:
+```
+vctl build --builder-mem 8192  -t sbgreact_build:0.2 .
+vctl run -m 8192 -it -v `pwd`/bb:/app/build sbgreact_build:0.2
+```
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
