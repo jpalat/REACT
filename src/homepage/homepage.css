@@ -1,0 +1,12 @@
+#content {
+  padding: 5% 20%;
+  text-align: center;
+}
+
+.card {
+  border: aqua;
+  border-width: thin;
+  border-style: solid;
+  text-align: center;
+  border-radius: 5px;
+}

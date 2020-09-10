@@ -1,13 +1,84 @@
+html {
+  background-color: whitesmoke;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+}
+
+#header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#SBG {
+  width: 12vw;
+  margin-top: 20px;
+}
+
+#image {
+  padding-left: 5px;
+}
+
+#mainlist {
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  border-radius: 5px;
+  margin: 2% 5%;
+}
+
+#menu {
+  background-color: transparent;
+  text-align: center;
+}
+
+#footer {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  padding-bottom: 25px;
+  align-items: center;
+}
+
+img#ADAC {
+  width: 30px;
+}
+
+#centerLink {
+  margin: 0 5vw;
+}
+
+img#NCEMC, img#NCSU {
+  height: 50px;
+}
+
+@media screen and (max-width: 768px) {
+  #SBG {
+    width: 200px;
+    margin-top: 15px;
+  }
+
+  #footer {
+    padding-bottom: 10px;
+  }
+  
+  img#ADAC {
+    width: 4vw;
+  }
+  
+  img#NCEMC, img#NCSU {
+    height: 8vw;
+  }
 }

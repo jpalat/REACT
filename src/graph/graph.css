@@ -1,0 +1,52 @@
+#graphList {
+  text-align: center;
+}
+
+#card {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+#panelList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#checkList {
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  width: 301px;
+  margin-bottom: 15px;
+}
+
+#buttonList {
+  margin-top: 10px;
+}
+
+#rightLogo {
+  padding: 9px;
+}
+
+#canvasList {
+  width: 85vw;
+  display: contents;
+}
+
+#VOLTAGE, #CURRENT, #multi {
+  height: 400px;
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  #pickers {
+    text-align: start;
+    width: 276px;
+    margin-left: 30px;
+  }
+
+  #VOLTAGE, #CURRENT, #multi {
+    height: 300px;
+  }
+}
